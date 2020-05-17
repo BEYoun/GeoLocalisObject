@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gpsclean/models/user.dart';
+import 'package:gpsclean/services/database.dart';
 
 class AuthService{
 
@@ -46,6 +47,10 @@ class AuthService{
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
+
+      // create a new document for the user with uid
+      await DatabaseService(uid: user.uid).updateUserData('name', '37.76493', '-122.42432');
+
       return _userFromFireBaseUser(user);
     }catch(e){
       print(e.toString());
